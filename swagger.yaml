@@ -1,0 +1,2909 @@
+swagger: "2.0"
+info:
+  title: "METRC API"
+  description: "Metrc Web API Documentation"
+  version: "0.2"
+  termsOfService: "https://api-co.metrc.com/Documentation/"
+  contact:
+    name: "METRC API"
+    url: "https://api-co.metrc.com/Documentation/"
+    email: "paul.kohlhoff@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "https://apache.org/"
+host: "https://sandbox.api-co.metrc.com" 
+# "https://api-co.metrc.com"
+securityDefinitions:
+  basic_auth:
+    type: basic
+    name: basic_auth
+security: 
+  basic_auth: []
+paths:
+  /facilities/v1:
+    get:
+      tags: ["facilities"]
+      summary: "This endpoint provides a list of facilities for which the authenticated user has access."
+      description: ""
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Facility"
+  /harvests/v1/{id}:
+    get:
+      tags: ["harvests"]
+      summary: ""
+      description: ""
+      parameters:
+        id:
+          in: path
+          type: integer
+          required: true
+        licenseNumber:
+          in: query
+          type: string
+          description: "If specified, the Harvest will be validated against the specified License Number. If not specified, the Harvest will be validated against all of the User's current Facilities. Please note that if the Harvest is not valid for the specified License Number, a 401 Unauthorized status will be returned."
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Harvest"
+  /harvests/v1/active:
+    get:
+      tags: ["harvests"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        lastModifiedStart:
+          in: query
+          type: string
+          required: false
+        lastModifiedEnd:
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Harvest"
+  /harvests/v1/onhold:
+    get:
+      tags: ["harvests"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        lastModifiedStart:
+          in: query
+          type: string
+          required: false
+        lastModifiedEnd:
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Harvest"
+  /harvests/v1/inactive:
+    get:
+      tags: ["harvests"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        lastModifiedStart:
+          in: query
+          type: string
+          required: false
+        lastModifiedEnd:
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Harvest"
+  /harvests/v1/waste/types:
+    get:
+      tags: ["harvests"]
+      summary: ""
+      description: ""
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/HarvestWasteType"
+  /harvests/v1/createpackages:
+    post:
+      tags: ["harvests", "obsolete"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/ObsoleteHarvestPackage"
+      responses:
+        200:
+          description: Successful response
+  /harvests/v1/create/packages:
+    post:
+      tags: ["harvests"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/HarvestPackage"
+      responses:
+        200:
+          description: Successful response
+  /harvests/v1/removewaste:
+    post:
+      tags: ["harvests"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            type: object
+            properties:
+              Id:
+                type: integer
+              WasteType:
+                type: string
+              UnitOfWeight:
+                type: string
+              WasteWeight:
+                type: number
+              ActualDate:
+                type: string
+      responses:
+        200:
+          description: Successful response
+  /harvests/v1/finish:
+    post:
+      tags: ["harvests"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            type: object
+            properties:
+              Id:
+                type: integer
+              ActualDate:
+                type: string
+  /harvests/v1/unfinish:
+    post:
+      tags: ["harvests"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            type: object
+            properties:
+              Id:
+                type: integer
+  /items/v1/{id}:
+    get:
+      tags: ["items"]
+      summary: ""
+      description: ""
+      parameters:
+        id:
+          in: path
+          type: integer
+          required: true
+        licenseNumber:
+          in: query
+          type: string
+          description: "If specified, the Item will be validated against the specified License Number. If not specified, the Item will be validated against all of the User's current Facilities. Please note that if the Item is not valid for the specified License Number, a 401 Unauthorized status will be returned."
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            schema:
+              $ref: "#/definitions/Item"
+    delete:
+      tags: ["items"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        id:
+          in: path
+          type: integer
+          required: true
+  /items/v1/active:
+    get:
+      tags: ["items"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          description: "The license number of the facility for which to return the list of active items."
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            schema:
+              type: array
+              items:
+                $ref: "#/definitions/Item"
+  /items/v1/categories:
+    get:
+      tags: ["items"]
+      summary: ""
+      description: ""
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          content:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  Name:
+                    type: string
+                  ProductCategoryType:
+                    type: string
+                  QuantityType:
+                    type: string
+                  RequiresStrain:
+                    type: string
+                  RequiresItemBrand:
+                    type: boolean
+                  RequiresAdministrationMethod:
+                    type: boolean
+                  RequiresUnitCbdPercent:
+                    type: boolean
+                  RequiresUnitCbdContent:
+                    type: boolean
+                  RequiresUnitThcPercent:
+                    type: boolean
+                  RequiresUnitThcContent:
+                    type: boolean
+                  RequiresUnitVolume:
+                    type: boolean
+                  RequiresUnitWeight:
+                    type: boolean
+                  RequiresServingSize:
+                    type: boolean
+                  RequiresSupplyDurationDays:
+                    type: boolean
+                  RequiresIngredients:
+                    type: boolean
+                  RequiresProductPhoto:
+                    type: boolean
+                  CanContainSeeds:
+                    type: boolean
+                  CanBeRemediated:
+                    type: boolean
+  /items/v1/brands:
+    get:
+      tags: ["items"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+          description: "The license number of the facility for which to return the list of active item brands."
+      responses:
+        200:
+          description: Successful response
+          content:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  Name:
+                    type: string
+                  Status:
+                    type: string
+  /items/v1/create:
+    post:
+      tags: ["items"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/CreateItem"
+
+  /items/v1/create:
+    post:
+      tags: ["items"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/CreateItem"
+  /items/v1/update:
+    post:
+      tags: ["items"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/UpdateItem"
+  /labtests/v1/states:
+    get:
+      tags: ["lab tests"]
+      summary: ""
+      description: ""
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          content:
+            schema:
+              type: array
+              items:
+                type: string
+  /labtests/v1/types:
+    get:
+      tags: ["lab tests"]
+      summary: ""
+      description: ""
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          content:
+            schema:
+              type: array
+              items:
+                type: object
+                $ref: "#/definitions/LabTestsType"
+  /labtests/v1/record:
+    post:
+      tags: ["lab tests"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/LabTestsRecord"
+  /packages/v1/{id}:
+    get:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        id:
+          in: path
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Package"
+  /packages/v1/{label}:
+    get:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        label:
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Package"
+  /packages/v1/active:
+    get:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        lastModifiedStart:
+          in: query
+          type: string
+          required: false
+        lastModifiedEnd:
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Package"
+  /packages/v1/onhold:
+    get:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        lastModifiedStart:
+          in: query
+          type: string
+          required: false
+        lastModifiedEnd:
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Package"
+  /packages/v1/inactive:
+    get:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        lastModifiedStart:
+          in: query
+          type: string
+          required: false
+        lastModifiedEnd:
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Package"
+  /packages/v1/types:
+    get:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /packages/v1/adjust/reasons:
+    get:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/PackageReason"
+  /packages/v1/create:
+    post:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/CreatePackage"
+  /packages/v1/create/testing:
+    post:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/CreatePackage"
+  /packages/v1/create/plantings:
+    post:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/CreatePlanting"
+  /packages/v1/change/item:
+    post:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/ChangeItem"
+  /packages/v1/change/rooms:
+    post:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/ChangeRooms"
+  /packages/v1/adjust:
+    post:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/AdjustPackage"
+  /packages/v1/finish:
+    post:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/FinishPackage"
+  /packages/v1/unfinish:
+    post:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/UnfinishPackage"
+  /packages/v1/remediate:
+    post:
+      tags: ["packages"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/RemediatePackage"
+  /patients/v1/{id}:
+    get:
+      tags: ["patients"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Patient"
+    delete:
+      tags: ["patients"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        id:
+          in: path
+          type: integer
+          required: true
+  /patients/v1/active:
+    get:
+      tags: ["patients"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Patient"
+  /patients/v1/status/{patientLicenseNumber}:
+    get:
+      tags: ["patients"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        patientLicenseNumber:
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/PatientStatus"
+  /patients/v1/add:
+    post:
+      tags: ["patients"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/AddPatient"
+  /patients/v1/update:
+    post:
+      tags: ["patients"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/UpdatePatient"
+  /plantbatches/v1/{id}:
+    get:
+      tags: ["plant batches"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        id:
+          in: path
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/PlantBatch"
+  /plantbatches/v1/active:
+    get:
+      tags: ["plant batches"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        lastModifiedStart:
+          in: query
+          type: string
+          required: false
+        lastModifiedEnd:
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/PlantBatch"
+  /plantbatches/v1/inactive:
+    get:
+      tags: ["plant batches"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        lastModifiedStart:
+          in: query
+          type: string
+          required: false
+        lastModifiedEnd:
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/PlantBatch"
+  /plantbatches/v1/types:
+    get:
+      tags: ["plant batches"]
+      summary: ""
+      description: ""
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /plantbatches/v1/createplantings:
+    post:
+      tags: ["plant batches"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/CreatePlantingPlantBatch"
+  /plantbatches/v1/createpackages:
+    post:
+      tags: ["plant batches"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/CreatePackagePlantBatch"
+  /plantbatches/v1/changegrowthphase:
+    post:
+      tags: ["plant batches"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/ChangeGrowthPhase"
+  /plantbatches/v1/moveplantbatches:
+    put:
+      tags: ["plant batches"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/MovePlantBatches"
+  /plantbatches/v1/additives:
+    post:
+      tags: ["plant batches"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/AdditivePlantBatches"
+  /plantbatches/v1/destroy:
+    post:
+      tags: ["plant batches"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/DestroyPlantBatches"
+  /plants/v1/{id}:
+    get:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        id:
+          in: path
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Plant"
+  /plants/v1/{label}:
+    get:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        label:
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Plant"
+  /plants/v1/vegetative:
+    get:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        lastModifiedStart:
+          in: query
+          type: string
+          required: false
+        lastModifiedEnd:
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Plant"
+  /plants/v1/flowering:
+    get:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        lastModifiedStart:
+          in: query
+          type: string
+          required: false
+        lastModifiedEnd:
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Plant"
+  /plants/v1/onhold:
+    get:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        lastModifiedStart:
+          in: query
+          type: string
+          required: false
+        lastModifiedEnd:
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Plant"
+  /plants/v1/inactive:
+    get:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        lastModifiedStart:
+          in: query
+          type: string
+          required: false
+        lastModifiedEnd:
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Plant"
+  /plants/v1/additives:
+    get:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        lastModifiedStart:
+          in: query
+          type: string
+          required: false
+        lastModifiedEnd:
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/PlantAdditive"
+    post:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/AddPlantAdditive"
+  /plants/v1/growthphases:
+    get:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items: string
+  /plants/v1/additives/types:
+    get:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items: string
+  /plants/v1/waste/methods:
+    get:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/PlantWasteMethod"
+  /plants/v1/waste/reasons:
+    get:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/PlantWasteReason"
+  /plants/v1/moveplants:
+    post:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/MovePlants"
+  /plants/v1/changegrowthphases:
+    post:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/PlantsChangeGrowthPhase"
+  /plants/v1/destroyplants:
+    post:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/DestroyPlants"
+  /plants/v1/additives/byroom:
+    post:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/AddPlantAdditiveByRoom"
+  /plants/v1/create/plantings:
+    post:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/CreatePlantingPlants"
+  /plants/v1/manicureplants:
+    post:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/ManicurePlant"
+  /plants/v1/harvestplants:
+    post:
+      tags: ["plants"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/HarvestPlant"
+  /rooms/v1/{id}:
+    get:
+      tags: ["rooms"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        id:
+          in: path
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Room"
+    delete:
+      tags: ["rooms"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        id:
+          in: path
+          type: integer
+          required: true
+
+  /rooms/v1/active:
+    get:
+      tags: ["rooms"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Room"
+  /rooms/v1/create:
+    post:
+      tags: ["rooms"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/CreateRoom"
+  /rooms/v1/update:
+    post:
+      tags: ["rooms"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/Room"
+  /sales/v1/customertypes:
+    get:
+      tags: ["sales"]
+      summary: ""
+      description: ""
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /sales/v1/receipts:
+    get:
+      tags: ["sales"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        lastModifiedStart:
+          in: query
+          type: string
+          required: false
+        lastModifiedEnd:
+          in: query
+          type: string
+          required: false
+        salesDateStart:
+          in: query
+          type: string
+          required: false
+        salesDateEnd:
+          in: query
+          type: string
+          required: false
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Receipt"
+    post:
+      tags: ["sales"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/AddSale"
+    put:
+      tags: ["sales"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/PutSale"
+  /sales/v1/receipts/{id}:
+    get:
+      tags: ["sales"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: false
+        id:
+          in: path
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Receipt"
+    delete:
+      tags: ["sales"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        id:
+          in: path
+          type: integer
+          required: true
+  /sales/v1/transactions/{salesDateStart}/{salesDateEnd}:
+    get:
+      tags: ["sales"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        salesDateStart:
+          in: path
+          type: string
+          required: true
+        salesDateEnd:
+          in: path
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Transaction"
+  /sales/v1/transactions/{date}:
+    post:
+      tags: ["sales"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        date:
+          in: path
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/AddTransaction"
+    put:
+      tags: ["sales"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        date:
+          in: path
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/AddTransaction"
+  /strains/v1/{id}:
+    get:
+      tags: ["strains"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        id:
+          in: path
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Strain"
+    delete:
+      tags: ["strains"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        id:
+          in: path
+          type: integer
+          required: true
+  /strains/v1/active:
+    get:
+      tags: ["strains"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/Strain"
+  /strains/v1/create:
+    post:
+      tags: ["strains"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/CreateStrain"
+  /strains/v1/update:
+    post:
+      tags: ["strains"]
+      summary: ""
+      description: ""
+      parameters:
+        licenseNumber:
+          in: query
+          type: string
+          required: true
+        body:
+          type: array
+          items:
+            $ref: "#/definitions/UpdateStrain"
+
+  /unitsofmeasure/v1/active:
+    get:
+      tags: ["Units of Measure"]
+      summary: ""
+      description: ""
+      parameters: []
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/definitions/UnitOfMeasure"
+
+# https://jsfiddle.net/6zLxr3ng/3/
+definitions:
+  License:
+    type: object
+    properties:
+      Number:
+        type: string
+      StartDate:
+        type: string
+        format: date
+      EndDate:
+        type: string
+        format: date
+      LicenseType:
+        type: string
+  UnitOfMeasure:
+    type: object
+    properties:
+      QuantityType:
+        type: string
+        description: ex. CountBased, WeightBased
+      Name:
+        type: string
+        description: The display name of the unit
+      Abbreviation:
+        type: string
+        description: A shortened name of the unit
+  Facility:
+    type: object
+    properties:
+      HireDate:
+        type: string
+        format: date
+      IsOwner:
+        type: boolean
+      IsManager:
+        type: boolean
+      Occupations: 
+        type: array
+        items: 
+          type: string
+      Name:
+        type: string
+      Alias:
+        type: string
+      DisplayName:
+        type: string
+      CredentialedDate:
+        type: string
+        format: date
+      SupportActivationDate:
+        type: string
+        format: date
+      SupportExpirationDate:
+        type: string
+        format: date
+      SupportLastPaidDate:
+        type: string
+        format: date
+      FacilityType:
+        type: string
+      License:
+        $ref: "#/definitions/License"
+  Harvest:
+    type: object
+    properties:
+      Id:
+        type: integer
+      Name:
+        type: string
+      HarvestType:
+        type: string
+      SourceStrainCount:
+        type: string
+      SourceStrainNames:
+        type: string
+      Strains:
+        type: array
+        items:
+          type: string
+      DryingRoomId:
+        type: integer
+      DryingRoomName:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      CurrentWeight:
+        type: number
+      TotalWasteWeight:
+        type: number
+      PlantCount:
+        type: integer
+      TotalWetWeight:
+        type: number
+      TotalRestoredWeight:
+        type: number
+      PackageCount:
+        type: integer
+      TotalPackagedWeight:
+        type: number
+      UnitOfWeightName:
+        type: string
+      LabTestingState:
+        type: string
+      LabTestingStateDate:
+        type: string
+        format: date
+      IsOnHold:
+        type: boolean
+      HarvestStartDate:
+        type: string
+        format: date
+      FinishedDate:
+        type: string
+        format: date
+      ArchivedDate:
+        type: string
+        format: date
+      LastModified:
+        type: string
+        format: date
+  HarvestWasteType:
+    type: object
+    properties: 
+      Name:
+        type: string
+  ObsoleteHarvestPackage:
+    type: object
+    properties:
+      Harvest:
+        type: integer
+      Tag:
+        type: string
+      Room:
+        type: string
+      Item:
+        type: string
+      Weight:
+        type: number
+      UnitOfWeight:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      IsProductionBatch:
+        type: boolean
+      ProductionBatchNumber:
+        type: string
+      ProductRequiresRemediation:
+        type: boolean
+      RemediateProduct:
+        type: boolean
+      RemediationMethodId:
+        type: integer
+      RemediationDate:
+        type: string
+      RemediationSteps:
+        type: string
+      ActualDate:
+        type: string
+  HarvestPackage:
+    type: object
+    properties:
+      Tag:
+        type: string
+      Room:
+        type: string
+      Item:
+        type: string
+      UnitOfWeight:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      IsProductionBatch:
+        type: boolean
+      ProductionBatchNumber:
+        type: string
+      ProductRequiresRemediation:
+        type: boolean
+      RemediateProduct:
+        type: boolean
+      RemediationMethodId:
+        type: integer
+      RemediationDate:
+        type: string
+      RemediationSteps:
+        type: string
+      ActualDate:
+        type: string
+      Ingredients: 
+        type: array
+        items: 
+          type: object
+          properties:
+            HarvestId:
+              type: integer
+            HarvestName:
+              type: string
+            Weight:
+              type: number
+            UnitOfWeight:
+              type: string
+  Item:
+    type: object
+    properties:
+      Id:
+        type: integer
+      Name:
+        type: string
+      ProductCategoryName:
+        type: string
+      ProductCategoryType:
+        type: string
+      QuantityType:
+        type: string
+      DefaultLabTestingState:
+        type: integer
+      UnitOfMeasureName:
+        type: string
+      ApprovalStatus:
+        type: integer
+      StrainId:
+        type: integer
+      StrainName:
+        type: string
+      AdministrationMethod:
+        type: string
+      UnitCbdPercent:
+        type: string
+      UnitCbdContent:
+        type: string
+      UnitCbdContentUnitOfMeasureName:
+        type: string
+      UnitThcPercent:
+        type: string
+      UnitThcContent:
+        type: string
+      UnitThcContentUnitOfMeasureName:
+        type: string
+      UnitVolume:
+        type: string
+      UnitVolumeUnitOfMeasureName:
+        type: string
+      UnitWeight:
+        type: string
+      UnitWeightUnitOfMeasureName:
+        type: string
+      ServingSize:
+        type: string
+      SupplyDurationDays:
+        type: string
+      UnitQuantity:
+        type: string
+      UnitQuantityUnitOfMeasureName:
+        type: string
+      Ingredients:
+        type: string
+      IsUsed:
+        type: boolean
+  CreateItem:
+    type: object
+    properties:
+      ItemCategory:
+        type: string
+      Name:
+        type: string
+      UnitOfMeasure:
+        type: string
+      Strain:
+        type: string
+      ItemBrand:
+        type: string
+      AdministrationMethod:
+        type: string
+      UnitCbdPercent:
+        type: string
+      UnitCbdContent:
+        type: string
+      UnitCbdContentUnitOfMeasure:
+        type: string
+      UnitThcPercent:
+        type: string
+      UnitThcContent:
+        type: string
+      UnitThcContentUnitOfMeasure:
+        type: string
+      UnitVolume:
+        type: string
+      UnitVolumeUnitOfMeasure:
+        type: string
+      UnitWeight:
+        type: string
+      UnitWeightUnitOfMeasure:
+        type: string
+      ServingSize:
+        type: string
+      SupplyDurationDays:
+        type: string
+      Ingredients:
+        type: string
+  UpdateItem:
+    type: object
+    properties:
+      Id: 
+        type: integer
+      Name: 
+        type: string
+      ItemCategory: 
+        type: string
+      UnitOfMeasure: 
+        type: string
+      Strain: 
+        type: string
+      ItemBrand: 
+        type: string
+      AdministrationMethod: 
+        type: string
+      UnitCbdPercent: 
+        type: string
+      UnitCbdContent: 
+        type: string
+      UnitCbdContentUnitOfMeasure: 
+        type: string
+      UnitThcPercent: 
+        type: string
+      UnitThcContent: 
+        type: string
+      UnitThcContentUnitOfMeasure:
+        type: string
+      UnitVolume: 
+        type: string
+      UnitVolumeUnitOfMeasure:
+        type: string
+      UnitWeight:
+        type: string
+      UnitWeightUnitOfMeasure:
+        type: string
+      ServingSize:
+        type: string
+      SupplyDurationDays:
+        type: string
+      Ingredients:
+        type: string
+  LabTestsType:
+    type: object
+    properties:
+      Id:
+        type: integer
+      Name:
+        type: string
+      RequiresTestResult:
+        type: boolean
+      AlwaysPasses:
+        type: boolean
+      DependencyMode:
+        type: string
+  LabTestsRecord:
+    type: object
+    properties:
+      Label:
+        type: string
+      ResultDate:
+        type: string
+      Results: 
+        type: array
+        items:
+          type: object
+          properties:
+            LabTestTypeName:
+              type: string
+            Quantity:
+              type: number
+            Passed:
+              type: boolean
+            Notes:
+              type: string
+  Package:
+    type: object
+    properties:
+      Id:
+        type: integer
+      Label:
+        type: string
+      PackageType:
+        type: string
+      SourceHarvestNames:
+        type: string
+      RoomId:
+        type: string
+      RoomName:
+        type: string
+      Quantity:
+        type: number
+      UnitOfMeasureName:
+        type: string
+      UnitOfMeasureAbbreviation:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      ProductId:
+        type: integer
+      ProductName:
+        type: string
+      ProductCategoryName:
+        type: string
+      Note:
+        type: string
+      PackagedDate:
+        type: string
+      InitialLabTestingState:
+        type: string
+      LabTestingState:
+        type: string
+      LabTestingStateDate:
+        type: string
+      IsProductionBatch:
+        type: boolean
+      ProductionBatchNumber:
+        type: string
+      IsTradeSample:
+        type: boolean
+      IsTestingSample:
+        type: boolean
+      IsProcessValidationTestingSample:
+        type: boolean
+      ProductRequiresRemediation:
+        type: boolean
+      ContainsRemediatedProduct:
+        type: boolean
+      RemediationDate:
+        type: string
+      ReceivedFromManifestNumber:
+        type: string
+      ReceivedFromFacilityLicenseNumber:
+        type: string
+      ReceivedFromFacilityName:
+        type: string
+      ReceivedDateTime:
+        type: string
+      IsOnHold:
+        type: boolean
+      ArchivedDate:
+        type: string
+      FinishedDate:
+        type: string
+      LastModified:
+        type: number
+  PackageReason:
+    type: object
+    properties:
+      Name:
+        type: string
+      RequiresNote:
+        type: boolean
+  PackageIngredient:
+    type: object
+    properties:
+      Package:
+        type: string
+      Quantity:
+        type: number
+      UnitOfMeasure:
+        type: string
+  CreatePackage:
+    type: object
+    properties:
+      Tag:
+        type: string
+      Room:
+        type: string
+      Item:
+        type: string
+      Quantity:
+        type: number
+      UnitOfMeasure:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      Note:
+        type: string
+      IsProductionBatch:
+        type: boolean
+      ProductionBatchNumber:
+        type: string
+      ProductRequiresRemediation:
+        type: boolean
+      ActualDate:
+        type: string
+      Ingredients:
+        type: array
+        items:
+          $ref: "#/definitions/PackageIngredient"
+  CreatePlanting:
+    type: object
+    properties:
+      PackageLabel:
+        type: string
+      PackageAdjustmentAmount:
+        type: number
+      PackageAdjustmentUnitOfMeasureName:
+        type: string
+      PlantBatchName:
+        type: string
+      PlantBatchType:
+        type: string
+      PlantCount:
+        type: integer
+      RoomName:
+        type: string
+      StrainName:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      PlantedDate:
+        type: string
+      UnpackagedDate:
+        type: string
+  ChangeItem:
+    type: object
+    properties:
+      Label:
+        type: string
+      Item:
+        type: string
+  ChangeRooms:
+    type: object
+    properties:
+      Label:
+        type: string
+      Room:
+        type: string
+      MoveDate:
+        type: string
+  AdjustPackage:
+    type: object
+    properties:
+      Label:
+        type: string
+      Quantity:
+        type: integer
+      UnitOfMeasure:
+        type: string
+      AdjustmentReason:
+        type: string
+      AdjustmentDate:
+        type: string
+      ReasonNote:
+        type: string
+  FinishPackage:
+    type: object
+    properties:
+      Label:
+        type: string
+      ActualDate:
+        type: string
+  UnfinishPackage:
+    type: object
+    properties:
+      Label:
+        type: string
+  RemediatePackage:
+    type: object
+    properties:
+      PackageLabel:
+        type: string
+      RemediationMethodName:
+        type: string
+      RemediationDate:
+        type: string
+      RemediationSteps:
+        type: string
+  Patient:
+    type: object
+    properties:
+      PatientId:
+        type: integer
+      LicenseNumber:
+        type: string
+      RegistrationDate:
+        type: string
+      LicenseEffectiveStartDate:
+        type: string
+      LicenseEffectiveEndDate:
+        type: string
+      RecommendedPlants:
+        type: integer
+      RecommendedSmokableQuantity:
+        type: number
+      OtherFacilitiesCount:
+        type: integer
+  PatientStatus:
+    type: object
+    properties:
+      PatientLicenseNumber:
+        type: string
+      FlowerOuncesAvailable:
+        type: number
+      ThcOuncesAvailable:
+        type: number
+  AddPatient:
+    type: object
+    properties:
+      LicenseNumber:
+        type: string
+      LicenseEffectiveStartDate:
+        type: string
+      LicenseEffectiveEndDate:
+        type: string
+      RecommendedPlants:
+        type: integer
+      RecommendedSmokableQuantity:
+        type: number
+      ActualDate:
+        type: string
+  UpdatePatient:
+    type: object
+    properties:
+      LicenseNumber:
+        type: string
+      NewLicenseNumber:
+        type: string
+      LicenseEffectiveStartDate:
+        type: string
+      LicenseEffectiveEndDate:
+        type: string
+      RecommendedPlants:
+        type: integer
+      RecommendedSmokableQuantity:
+        type: number
+      ActualDate:
+        type: string
+  PlantBatch:
+    type: object
+    properties:
+      Id:
+        type: integer
+      Name:
+        type: string
+      Type:
+        type: string
+      RoomId:
+        type: string
+      RoomName:
+        type: string
+      StrainId:
+        type: integer
+      StrainName:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      UntrackedCount:
+        type: integer
+      Count:
+        type: integer
+      TrackedCount:
+        type: integer
+      LiveCount:
+        type: integer
+      PackagedCount:
+        type: integer
+      HarvestedCount:
+        type: integer
+      DestroyedCount:
+        type: integer
+      SourcePackageId:
+        type: integer
+      SourcePackageLabel:
+        type: string
+      SourcePlantId:
+        type: integer
+      SourcePlantLabel:
+        type: string
+      PlantedDate:
+        type: string
+      LastModified:
+        type: string
+  CreatePlantingPlantBatch:
+    type: object
+    properties:
+      Name:
+        type: string
+      Type:
+        type: string
+      Count:
+        type: integer
+      Strain:
+        type: string
+      Room:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      ActualDate:
+        type: string
+  CreatePackagePlantBatch:
+    type: object
+    properties:
+      Id:
+        type: string
+      PlantBatch:
+        type: string
+      Count:
+        type: integer
+      Room:
+        type: string
+      Item:
+        type: string
+      Tag:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      Note:
+        type: string
+      IsTradeSample:
+        type: boolean
+      ActualDate:
+        type: string
+  ChangeGrowthPhase:
+    type: object
+    properties:
+      Name:
+        type: string
+      Count:
+        type: integer
+      StartingTag:
+        type: string
+      GrowthPhase:
+        type: string
+      NewRoom:
+        type: string
+      GrowthDate:
+        type: string
+      PatientLicenseNumber:
+        type: string
+  MovePlantBatches:
+    type: object
+    properties:
+      Name:
+        type: string
+      Room:
+        type: string
+      MoveDate:
+        type: string
+  ActiveIngredient:
+    type: object
+    properties:
+      Name:
+        type: string
+      Percentage:
+        type: number
+  AdditivePlantBatches:
+    type: object
+    properties:
+      AdditiveType:
+        type: string
+      ProductTradeName:
+        type: string
+      EpaRegistrationNumber:
+        type: string
+      ProductSupplier:
+        type: string
+      ApplicationDevice:
+        type: string
+      TotalAmountApplied:
+        type: number
+      TotalAmountUnitOfMeasure:
+        type: string
+      ActiveIngredients:
+        type: array
+        items:
+          $ref: "#/definitions/ActiveIngredient"
+      PlantBatchName:
+        type: string
+      ActualDate:
+        type: string
+  DestroyPlantBatches:
+    type: object
+    properties:
+      PlantBatch:
+        type: string
+      Count:
+        type: integer
+      ReasonNote:
+        type: string
+      ActualDate:
+        type: string
+  Plant:
+    type: object
+    properties:
+      Id:
+        type: integer
+      Label:
+        type: string
+      State:
+        type: string
+      GrowthPhase:
+        type: string
+      PlantBatchId:
+        type: integer
+      PlantBatchName:
+        type: string
+      PlantBatchTypeName:
+        type: string
+      StrainId:
+        type: integer
+      StrainName:
+        type: string
+      RoomId:
+        type: integer
+      RoomName:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      HarvestId:
+        type: string
+      HarvestedUnitOfWeightName:
+        type: string
+      HarvestedUnitOfWeightAbbreviation:
+        type: string
+      HarvestedWetWeight:
+        type: string
+      HarvestCount:
+        type: integer
+      IsOnHold:
+        type: boolean
+      PlantedDate:
+        type: string
+      VegetativeDate:
+        type: string
+      FloweringDate:
+        type: string
+      HarvestedDate:
+        type: string
+      DestroyedDate:
+        type: string
+      DestroyedNote:
+        type: string
+      DestroyedByUserName:
+        type: string
+      LastModified:
+        type: string
+  PlantAdditive:
+    type: object
+    properties:
+      AdditiveTypeName:
+        type: string
+      ProductTradeName:
+        type: string
+      EpaRegistrationNumber:
+        type: string
+      ProductSupplier:
+        type: string
+      ApplicationDevice:
+        type: string
+      AmountUnitOfMeasure:
+        type: string
+      TotalAmountApplied:
+        type: number
+      PlantBatchId:
+        type: string
+      PlantBatchName:
+        type: string
+      PlantCount:
+        type: integer
+  PlantWasteMethod:
+    type: object
+    properties:
+      Name:
+        type: string
+  PlantWasteReason:
+    type: object
+    properties:
+      Name:
+      type: string
+    RequiresNote:
+      type: boolean
+  MovePlants:
+    type: object
+    properties:
+      Id:
+        type: integer
+      Label:
+        type: string
+      Room:
+        type: string
+      ActualDate:
+        type: string
+  PlantsChangeGrowthPhase:
+    type: object
+    properties:
+      Id:
+        type: string
+      Label:
+        type: string
+      NewTag:
+        type: string
+      GrowthPhase:
+        type: string
+      NewRoom:
+        type: string
+      GrowthDate:
+        type: string
+  DestroyPlants:
+    type: object
+    properties:
+      Id:
+        type: string
+      Label:
+        type: string
+      ReasonNote:
+        type: string
+      ActualDate:
+        type: string
+  AddPlantAdditive:
+    type: object
+    properties:
+      AdditiveType:
+        type: string
+      ProductTradeName:
+        type: string
+      EpaRegistrationNumber:
+        type: string
+      ProductSupplier:
+        type: string
+      ApplicationDevice:
+        type: string
+      TotalAmountApplied:
+        type: number
+      TotalAmountUnitOfMeasure:
+        type: string
+      ActiveIngredients:
+        type: array
+        items:
+          $ref: "#/definitions/ActiveIngredient"
+      PlantLabels:
+        type: array
+        items:
+          type: string
+      ActualDate:
+        type: string
+  AddPlantAdditiveByRoom:
+    type: object
+    properties:
+      AdditiveType:
+        type: string
+      ProductTradeName:
+        type: string
+      EpaRegistrationNumber:
+        type: string
+      ProductSupplier:
+        type: string
+      ApplicationDevice:
+        type: string
+      TotalAmountApplied:
+        type: number
+      TotalAmountUnitOfMeasure:
+        type: string
+      ActiveIngredients:
+        type: array
+        items:
+          $ref: "#/definitions/ActiveIngredient"
+      RoomName:
+        type: string
+      ActualDate:
+        type: string
+  CreatePlantingPlants:
+    type: object
+    properties:
+      PlantLabel:
+        type: string
+      PlantBatchName:
+        type: string
+      PlantBatchType:
+        type: string
+      PlantCount:
+        type: integer
+      RoomName:
+        type: string
+      StrainName:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      ActualDate:
+        type: string
+  ManicurePlant:
+    type: object
+    properties:
+      Plant:
+        type: string
+      Weight:
+        type: number
+      UnitOfWeight:
+        type: string
+      DryingRoom:
+        type: string
+      HarvestName:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      ActualDate:
+        type: string
+  HarvestPlant:
+    type: object
+    properties:
+      Plant:
+        type: string
+      Weight:
+        type: number
+      UnitOfWeight:
+        type: string
+      DryingRoom:
+        type: string
+      HarvestName:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      ActualDate:
+        type: string
+  Room:
+    type: object
+    properties:
+      Id:
+        type: integer
+      Name:
+        type: string
+  CreateRoom:
+    type: object
+    properties:
+      Name:
+        type: string
+  Transaction:
+    type: object
+    properties:
+      PackageId:
+        type: integer
+      PackageLabel:
+        type: string
+      ProductName:
+        type: string
+      QuantitySold:
+        type: number
+      UnitOfMeasureName:
+        type: string
+      UnitOfMeasureAbbreviation:
+        type: string
+      TotalPrice:
+        type: number
+      SalesDeliveryState:
+        type: string
+      ArchivedDate:
+        type: string
+      LastModified:
+        type: string
+  Receipt:
+    type: object
+    properties:
+      Id:
+        type: integer
+      ReceiptNumber:
+        type: string
+      SalesDateTime:
+        type: number
+      SalesCustomerType:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      CaregiverLicenseNumber:
+        type: string
+      IdentificationMethod:
+        type: string
+      TotalPackages:
+        type: integer
+      TotalPrice:
+        type: number
+      Transactions:
+        type: array
+        items:
+          $ref: "#/definitions/Transaction"
+      IsFinal:
+        type: boolean
+      ArchivedDate:
+        type: string
+      LastModified:
+        type: string
+  AddTransaction:
+    type: object
+    properties:
+      PackageLabel:
+        type: string
+      Quantity:
+        type: number
+      UnitOfMeasure:
+        type: string
+      TotalAmount:
+        type: number
+  AddSale:
+    type: object
+    properties:
+      SalesDateTime:
+        type: number
+      SalesCustomerType:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      CaregiverLicenseNumber:
+        type: string
+      IdentificationMethod:
+        type: string
+      Transactions:
+        type: array
+        items:
+          ref: "#/definitions/AddTransaction"
+  PutSale:
+    type: object
+    properties:
+      Id:
+        type: integer
+      SalesDateTime:
+        type: number
+      SalesCustomerType:
+        type: string
+      PatientLicenseNumber:
+        type: string
+      CaregiverLicenseNumber:
+        type: string
+      IdentificationMethod:
+        type: string
+      Transactions:
+        type: array
+        items:
+          ref: "#/definitions/AddTransaction"
+  Strain:
+    type: object
+    properties:
+      Id:
+        type: integer
+      Name:
+        type: string
+      TestingStatus:
+        type: string
+      ThcLevel:
+        type: string
+      CbdLevel:
+        type: string
+      IndicaPercentage:
+        type: number
+      SativaPercentage:
+        type: number
+      IsUsed:
+        type: boolean
+      Genetics:
+        type: string
+  CreateStrain:
+    type: object
+    properties:
+      Name:
+        type: string
+      TestingStatus:
+        type: string
+      ThcLevel:
+        type: string
+      CbdLevel:
+        type: string
+      IndicaPercentage:
+        type: number
+      SativaPercentage:
+        type: number
+  UpdateStrain:
+    type: object
+    properties:
+      Id:
+        type: integer
+      Name:
+        type: string
+      TestingStatus:
+        type: string
+      ThcLevel:
+        type: string
+      CbdLevel:
+        type: string
+      IndicaPercentage:
+        type: number
+      SativaPercentage:
+        type: number
+
